@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship, declarative_base
 
 
@@ -18,38 +18,42 @@ class BaseModel(Base):
 
 
 class Recipient(BaseModel):
-    __tablename__ = "recipient"
-
-    id_Recipient = Column(Integer, primary_key=True, index=True)
-    Name = Column(String, index=True)
-    Surname = Column(String, index=True)
-    Patronymic = Column(String, index=True)
-    Recipient_code = Column(Integer, index=True)
-    Outside = Column(String, index=True)
-    House_number = Column(String, index=True)
-    Apartment_number = Column(String, index=True)
-    subscription = relationship("Subscription")
+    __tablename__ = "recipients"
+    """
+        Класс Получателя, описаны его поля и методы 
+    """
+    name = Column(String, index=True, nullable=False)
+    surname = Column(String, index=True, nullable=False)
+    patronymic = Column(String, index=True)
+    recipient_code = Column(Integer, index=True, unique=True)
+    outside = Column(String, index=True, nullable=False)
+    house_number = Column(String, index=True, nullable=False)
+    apartment_number = Column(String, index=True, nullable=False)
+    subscription = relationship("Subscription",  back_populates="recipient")
 
 
 class Subscription(BaseModel):
-    __tablename__ = "subscription"
+    __tablename__ = "subscriptions"
+    """
+        Класс Подписка, описаны его поля и методы 
+    """
+    subscription_period = Column(Integer, index=True, unique=True)
+    month_of_delivery_start = Column(Integer, index=True, unique=True)
+    year_of_delivery_start = Column(Integer, index=True, unique=True)
+    recipient = relationship("Recipient", back_populates="subscription")
+    edition = relationship("Edition", back_populates="subscriptions")
 
-    id_Subscription = Column(Integer, primary_key=True, index=True)
-    Subscription_period = Column(Integer, index=True)
-    Month_of_delivery_start = Column(Integer, index=True)
-    Year_of_delivery_start = Column(Integer, index=True)
-    recipient = relationship("Recipient")
-
-    Recipient_FK = Column(Integer,  ForeignKey("recipient.id_Recipient"), nullable=False)
-    Editions_FK = Column(Integer, ForeignKey("editions.id_Editions"), nullable=False)
+    recipient_id = Column(Integer,  ForeignKey("recipients.id"), nullable=False)
+    edition_id = Column(Integer, ForeignKey("editions.id"), nullable=False)
 
 
-class Editions(BaseModel):
+class Edition(BaseModel):
     __tablename__ = "editions"
-
-    id_Editions = Column(Integer, primary_key=True, index=True)
-    Titles_of_the_publication = Column(String, index=True)
-    Index_of_the_publication = Column(Integer, index=True)
-    Type_of_publication = Column(String, index=True)
-    The_cost_of_searches_in_months = Column(Integer, index=True)
-    subscription = relationship("Subscription")
+    """
+        Класс Издание, описаны его поля и методы 
+    """
+    titles_of_the_publication = Column(String, index=True, nullable=False)
+    index_of_the_publication = Column(Integer, index=True, unique=True)
+    type_of_publication = Column(String, index=True)
+    the_cost_of_searches_in_months = Column(Float, index=True)
+    subscription = relationship("Subscription", back_populates="edition")
