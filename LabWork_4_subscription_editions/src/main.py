@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 
 from src import crud, models, schemas
 from src.database import SessionLocal, engine
-from src.models import Subscription
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -83,7 +82,7 @@ def read_edition(edition_id: int, db: Session = Depends(get_db)):
     return db_edition
 
 
-@app.get("/recipient_subscription/{recipient_id}", response_model=list[schemas.Subscription])
+@app.get("/recipient_subscription/{recipient_id}", response_model=List[schemas.Subscription])
 def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     """
     Получение Подписки Подпищика по id, если такой id уже есть в БД, то выдается ошибка
@@ -94,7 +93,7 @@ def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db)
     return db_subscription
 
 
-@app.get("/edition_subscription/{recipient_id}", response_model=list[schemas.Subscription])
+@app.get("/edition_subscription/{recipient_id}", response_model=List[schemas.Subscription])
 def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     """
     Получение Подписки на Издания по id, если такой id уже есть в БД, то выдается ошибка

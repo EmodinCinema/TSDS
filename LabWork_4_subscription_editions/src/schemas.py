@@ -39,7 +39,7 @@ class Recipient(RecipientBase):
         Задание настройки для возможности работать с объектами ORM
         """
         orm_mode = True
-        arbitrary_types_allowed = True
+        #arbitrary_types_allowed = True
 
 
 class SubscriptionBase(BaseModel):
@@ -73,7 +73,7 @@ class Subscription(SubscriptionBase):
         Задание настройки для возможности работать с объектами ORM
         """
         orm_mode = True
-        arbitrary_types_allowed = True
+        #arbitrary_types_allowed = True
 
 
 class EditionBase(BaseModel):
@@ -106,4 +106,4 @@ class Edition(EditionBase):
         Задание настройки для возможности работать с объектами ORM
         """
         orm_mode = True
-        arbitrary_types_allowed = True
+        #arbitrary_types_allowed = True
