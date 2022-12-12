@@ -78,18 +78,18 @@ def get_subscription(db: Session, subscription_id: int):
     return db.query(models.Subscription).filter(models.Subscription.id == subscription_id).first()
 
 
-def get_subscription_by_recipient(db: Session, recipient_id: int, skip: int = 0, limit: int = 100):
+def get_subscription_by_recipient(db: Session, recipient_id: int):
     """
     Получить Подписку по Подпищику
     """
-    return db.query(models.Subscription).filter(models.Subscription.recipient_id == recipient_id).offset(skip).limit(limit).all()
+    return db.query(models.Subscription).filter(models.Subscription.recipient_id == recipient_id).first()
 
 
-def get_subscription_by_edition(db: Session, edition_id: int, skip: int = 0, limit: int = 100):
+def get_subscription_by_edition(db: Session, edition_id: int):
     """
     Получить Подписку по Изданию
     """
-    return db.query(models.Subscription).filter(models.Subscription.edition_id == edition_id).offset(skip).limit(limit).all()
+    return db.query(models.Subscription).filter(models.Subscription.edition_id == edition_id).first()
 
 
 def get_recipients(db: Session, skip: int = 0, limit: int = 100):

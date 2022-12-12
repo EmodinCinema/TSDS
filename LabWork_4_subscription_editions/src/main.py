@@ -82,23 +82,23 @@ def read_edition(edition_id: int, db: Session = Depends(get_db)):
     return db_edition
 
 
-@app.get("/recipient_subscription/{recipient_id}", response_model=List[schemas.Subscription])
-def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+@app.get("/recipient_subscription/{recipient_id}", response_model=schemas.Subscription)
+def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db)):
     """
     Получение Подписки Подпищика по id
     """
-    db_subscription = crud.get_subscription_by_recipient(db=db, recipient_id=recipient_id, skip=skip, limit=limit)
+    db_subscription = crud.get_subscription_by_recipient(db=db, recipient_id=recipient_id)
     if db_subscription is None:
         raise HTTPException(status_code=400, detail="Recipient subscription not found")
     return db_subscription
 
 
-@app.get("/edition_subscription/{recipient_id}", response_model=List[schemas.Subscription])
-def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+@app.get("/edition_subscription/{recipient_id}", response_model=schemas.Subscription)
+def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db)):
     """
     Получение Подписки Издания по id
     """
-    db_subscription = crud.get_subscription_by_edition(db=db, edition_id=edition_id, skip=skip, limit=limit)
+    db_subscription = crud.get_subscription_by_edition(db=db, edition_id=edition_id)
     if db_subscription is None:
         raise HTTPException(status_code=400, detail="Edition subscription not found")
     return db_subscription
