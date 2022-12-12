@@ -91,3 +91,23 @@ def get_subscription_by_edition(db: Session, edition_id: int, skip: int = 0, lim
     """
     return db.query(models.Subscription).filter(models.Subscription.edition_id == edition_id).offset(skip).limit(limit).all()
 
+
+def get_recipients(db: Session, skip: int = 0, limit: int = 100):
+    """
+    Получить список Подпищиков
+    """
+    return db.query(models.Recipient).offset(skip).limit(limit).all()
+
+
+def get_editions(db: Session, skip: int = 0, limit: int = 100):
+    """
+    Получить список Изданий
+    """
+    return db.query(models.Edition).offset(skip).limit(limit).all()
+
+
+def get_subscriptions(db: Session, skip: int = 0, limit: int = 100):
+    """
+    Получить список Подписок
+    """
+    return db.query(models.Subscription).offset(skip).limit(limit).all()

@@ -29,6 +29,7 @@ class Recipient(BaseModel):
     outside = Column(String, index=True, nullable=False)
     house_number = Column(String, index=True, nullable=False)
     apartment_number = Column(String, index=True, nullable=False)
+
     subscription_r = relationship("Subscription",  back_populates="recipient")
 
 
@@ -40,6 +41,7 @@ class Subscription(BaseModel):
     subscription_period = Column(Integer, index=True, nullable=False)
     month_of_delivery_start = Column(Integer, index=True, nullable=False)
     year_of_delivery_start = Column(Integer, index=True, nullable=False)
+
     recipient = relationship("Recipient", back_populates="subscription_r")
     edition = relationship("Edition", back_populates="subscription_e")
 
@@ -56,4 +58,5 @@ class Edition(BaseModel):
     index_of_the_publication = Column(Integer, index=True, unique=True)
     type_of_publication = Column(String, index=True)
     the_cost_of_searches_in_months = Column(Float, index=True)
+
     subscription_e = relationship("Subscription", back_populates="edition")

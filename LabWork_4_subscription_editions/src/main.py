@@ -60,7 +60,7 @@ def create_subscription(subscription: schemas.SubscriptionCreate, recipient_id: 
     return crud.create_subscription(db=db, subscription=subscription, recipient_id=recipient_id, edition_id=edition_id)
 
 
-@app.post("/recipient/{recipient_id}", response_model=schemas.Recipient)
+@app.get("/recipient/{recipient_id}", response_model=schemas.Recipient)
 def read_recipient(recipient_id: int, db: Session = Depends(get_db)):
     """
     Получение Подпищика по id, если такой id уже есть в БД, то выдается ошибка
@@ -85,7 +85,7 @@ def read_edition(edition_id: int, db: Session = Depends(get_db)):
 @app.get("/recipient_subscription/{recipient_id}", response_model=List[schemas.Subscription])
 def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     """
-    Получение Подписки Подпищика по id, если такой id уже есть в БД, то выдается ошибка
+    Получение Подписки Подпищика по id
     """
     db_subscription = crud.get_subscription_by_recipient(db=db, recipient_id=recipient_id, skip=skip, limit=limit)
     if db_subscription is None:
@@ -96,7 +96,7 @@ def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db)
 @app.get("/edition_subscription/{recipient_id}", response_model=List[schemas.Subscription])
 def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     """
-    Получение Подписки на Издания по id, если такой id уже есть в БД, то выдается ошибка
+    Получение Подписки Издания по id
     """
     db_subscription = crud.get_subscription_by_edition(db=db, edition_id=edition_id, skip=skip, limit=limit)
     if db_subscription is None:
@@ -107,12 +107,39 @@ def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db), 
 @app.get("/subscription/{subscription_id}", response_model=schemas.Subscription)
 def read_recipient_subscription(subscription_id: int, db: Session = Depends(get_db)):
     """
-    Получение Подписки на Издания по id, если такой id уже есть в БД, то выдается ошибка
+    Получение Подписки на Издания по id
     """
     db_subscription = crud.get_subscription(db, subscription_id=subscription_id)
     if db_subscription is None:
         raise HTTPException(status_code=400, detail="Subscription not found")
     return db_subscription
+
+
+@app.get("/recipients/", response_model=list[schemas.Recipient])
+def read_recipients(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    Получение списка пользователей
+    """
+    recipients = crud.get_recipients(db, skip=skip, limit=limit)
+    return recipients
+
+
+@app.get("/editions/", response_model=list[schemas.Edition])
+def read_editions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    Получение списка Издания
+    """
+    editions = crud.get_editions(db, skip=skip, limit=limit)
+    return editions
+
+
+@app.get("/subscriptions/", response_model=list[schemas.Subscription])
+def read_editions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    Получение списка Подписок
+    """
+    subscriptions = crud.get_subscriptions(db, skip=skip, limit=limit)
+    return subscriptions
 
 
 if __name__ == "__main__":

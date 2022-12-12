@@ -32,7 +32,7 @@ class Recipient(RecipientBase):
     """
     id: int
     # Выключаешь и всё работает
-    subscription_r: List[Subscription]
+    #subscription_r: List[Subscription]
 
     class Config:
         """
