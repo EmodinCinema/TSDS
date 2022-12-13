@@ -20,7 +20,8 @@ def create_subscription(db: Session, subscription: schemas.SubscriptionCreate, r
     """
     Добавление новой Подписки
     """
-    db_data = models.Subscription(**subscription.dict(), subscription_period=subscription.subscription_period,
+    db_data = models.Subscription(#**subscription.dict(),
+                                  subscription_period=subscription.subscription_period,
                                   month_of_delivery_start=subscription.month_of_delivery_start,
                                   year_of_delivery_start=subscription.year_of_delivery_start,
                                   recipient_id=recipient_id, edition_id=edition_id)
@@ -64,14 +65,14 @@ def get_edition(db: Session, edition_id: int):
     return db.query(models.Edition).filter(models.Edition.id == edition_id).first()
 
 
-def get_edition_by_index(db: Session, edition_index: int):
+def get_edition_by_index(db: Session, index_of_the_publication: int):
     """
     Получить Издание по его index
     """
-    return db.query(models.Edition).filter(models.Edition.index_of_the_publication == edition_index).first()
+    return db.query(models.Edition).filter(models.Edition.index_of_the_publication == index_of_the_publication).first()
 
 
-def get_subscription(db: Session, subscription_id: int):
+def get_subscription(db: Session, subscription_id: int):#
     """
     Получить Подписку по его id
     """
@@ -85,11 +86,11 @@ def get_subscription_by_recipient(db: Session, recipient_id: int):
     return db.query(models.Subscription).filter(models.Subscription.recipient_id == recipient_id).first()
 
 
-def get_subscription_by_edition(db: Session, edition_id: int):
-    """
-    Получить Подписку по Изданию
-    """
-    return db.query(models.Subscription).filter(models.Subscription.edition_id == edition_id).first()
+# def get_subscription_by_edition(db: Session, edition_id: int):
+#     """
+#     Получить Подписку по Изданию
+#     """
+#     return db.query(models.Subscription).filter(models.Subscription.edition_id == edition_id).first()
 
 
 def get_recipients(db: Session, skip: int = 0, limit: int = 100):
@@ -106,8 +107,9 @@ def get_editions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Edition).offset(skip).limit(limit).all()
 
 
-def get_subscriptions(db: Session, skip: int = 0, limit: int = 100):
+def get_subscriptions(db: Session, skip: int = 0, limit: int = 100):#
     """
     Получить список Подписок
     """
     return db.query(models.Subscription).offset(skip).limit(limit).all()
+

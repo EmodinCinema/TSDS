@@ -80,8 +80,8 @@ class EditionBase(BaseModel):
     """
     Базовый класс для Edition
     """
-    titles_of_the_publication: str
     index_of_the_publication: int
+    titles_of_the_publication: str
     type_of_publication: Union[None, str]
 
 

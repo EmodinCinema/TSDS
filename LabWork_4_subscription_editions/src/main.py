@@ -12,7 +12,7 @@ app = FastAPI()
 
 
 # Dependency
-def get_db():
+def get_db():   # pragma: no cover
     """
     Задаем зависимость к БД. При каждом запросе будет создаваться новое
     подключение.
@@ -25,7 +25,7 @@ def get_db():
 
 
 @app.post("/recipient/", response_model=schemas.Recipient)
-def create_user(recipient: schemas.RecipientCreate, db: Session = Depends(get_db)):
+def create_recipient(recipient: schemas.RecipientCreate, db: Session = Depends(get_db)):
     """
     Создание Подпищика, если такой recipient codee уже есть в БД, то выдается ошибка
     """
@@ -36,14 +36,14 @@ def create_user(recipient: schemas.RecipientCreate, db: Session = Depends(get_db
 
 
 @app.post("/edition/", response_model=schemas.Edition)
-def create_user(edition: schemas.EditionCreate, db: Session = Depends(get_db)):
+def create_edition(edition: schemas.EditionCreate, db: Session = Depends(get_db)):
     """
     Создание Издания, если такой edition codee уже есть в БД, то выдается ошибка
     """
-    db_edition = crud.get_edition(db, index_edition=edition.index_of_the_publication)
+    db_edition = crud.get_edition_by_index(db, index_of_the_publication=edition.index_of_the_publication)
     if db_edition:
         raise HTTPException(status_code=400, detail="Edition already registered")
-    return crud.create_recipient(db=db, edition=edition)
+    return crud.create_edition(db=db, edition=edition)
 
 
 @app.post("/subscription/", response_model=schemas.Subscription)
@@ -93,15 +93,15 @@ def read_recipient_subscription(recipient_id: int, db: Session = Depends(get_db)
     return db_subscription
 
 
-@app.get("/edition_subscription/{recipient_id}", response_model=schemas.Subscription)
-def read_recipient_subscription(edition_id: int, db: Session = Depends(get_db)):
-    """
-    Получение Подписки Издания по id
-    """
-    db_subscription = crud.get_subscription_by_edition(db=db, edition_id=edition_id)
-    if db_subscription is None:
-        raise HTTPException(status_code=400, detail="Edition subscription not found")
-    return db_subscription
+# @app.get("/edition_subscription/{recipient_id}", response_model=schemas.Subscription)
+# def read_edition_subscription(edition_id: int, db: Session = Depends(get_db)):
+#     """
+#     Получение Подписки Издания по id
+#     """
+#     db_subscription = crud.get_subscription_by_edition(db=db, edition_id=edition_id)
+#     if db_subscription is None:
+#         raise HTTPException(status_code=400, detail="Edition subscription not found")
+#     return db_subscription
 
 
 @app.get("/subscription/{subscription_id}", response_model=schemas.Subscription)
@@ -142,5 +142,5 @@ def read_editions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     return subscriptions
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", port=6000, log_level="info", reload=True)
+#if __name__ == "__main__":
+#    uvicorn.run("main:app", port=6000, log_level="info", reload=True)
